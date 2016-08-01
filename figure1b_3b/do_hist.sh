@@ -30,4 +30,25 @@
 
 file=$1
 expr=$2
-tail -n +8 ${file}${expr} | cut -d" " -f 3 > out_${file}${expr}.lats
+
+# data in the file has following format
+# {GET | SET | TOTAL} , COUNTER, REQUEST ID, LATENCY
+#
+# TOTAL 0 1470010111224595441 2305
+# TOTAL 1 1470010111224624459 2296
+# TOTAL 2 1470010111224631471 2356
+# ...
+# TOTAL N 1470010111224696789 2561
+#
+# we want to extract latency value only.
+#
+# We also skip first 7 lines of metadata info as follows:
+# servers : 192.168.1.10:11211
+# threads count: 2
+# concurrency: 128
+# run time: 600s
+# windows size: 10k
+# set proportion: set_prop=0.10
+# get proportion: get_prop=0.90
+
+tail -n +8 ${file}${expr} | cut -d" " -f 4 > out_${file}${expr}.lats
