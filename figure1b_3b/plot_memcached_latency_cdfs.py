@@ -91,7 +91,7 @@ for f in fnames:
       continue
     req_type = fields[0]
     req_id = int(fields[1])
-    req_delay = float(fields[2])
+    req_delay = float(fields[3])
     if req_delay > 200000:
       minrto_outliers += 1
     values[req_type].append(req_delay)
@@ -184,8 +184,8 @@ for f in fnames:
 
 plt.xticks()
 #  plt.xscale("log")
-plt.xlim(0, 2250)
-plt.xticks(range(0, 2500, 500), [str(x) for x in range(0, 2500, 500)])
+plt.xlim(0, 5000)
+plt.xticks(range(0, 7000, 1000), [str(x) for x in range(0, 7000, 1000)])
 plt.ylim(0, 1.0)
 plt.yticks(np.arange(0.0, 1.01, 0.2), [str(x) for x in np.arange(0.0, 1.01, 0.2)])
 plt.xlabel("Request latency [$\mu$s]")
