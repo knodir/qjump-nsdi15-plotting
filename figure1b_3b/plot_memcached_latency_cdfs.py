@@ -184,8 +184,8 @@ for f in fnames:
 
 plt.xticks()
 #  plt.xscale("log")
-plt.xlim(0, 5000)
-plt.xticks(range(0, 7000, 1000), [str(x) for x in range(0, 7000, 1000)])
+plt.xlim(0, 10100)
+plt.xticks(range(0, 10100, 2500), [str(x) for x in range(0, 10100, 2500)])
 plt.ylim(0, 1.0)
 plt.yticks(np.arange(0.0, 1.01, 0.2), [str(x) for x in np.arange(0.0, 1.01, 0.2)])
 plt.xlabel("Request latency [$\mu$s]")
@@ -198,6 +198,7 @@ plt.legend(loc=4, frameon=False, handlelength=2.5, handletextpad=0.2)
 plt.savefig("%s.pdf" % outname, format="pdf", bbox_inches="tight")
 
 plt.ylim(0.9, 1.0)
+plt.yticks(np.arange(0.9, 1.01, 0.02), [str(x) for x in np.arange(0.9, 1.01, 0.02)])
 #plt.axhline(0.999, ls='--', color='k')
 
 plt.savefig("%s-90th.pdf" % outname, format="pdf", bbox_inches="tight")
