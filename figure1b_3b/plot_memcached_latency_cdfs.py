@@ -46,22 +46,29 @@ def serialize_hist(n, bins, outdir):
     bf.write(str(val)+"\n")
 #-----------
 
-if len(sys.argv) < 2:
-  print "usage: plot_memcached_latency_cdfs.py <input file 1> <label 1> ... " \
+if len(sys.argv) < 3:
+  print "usage: plot_memcached_latency_cdfs.py xaxis_max " \
+      "<input file 1> <label 1> ... " \
       "<input  file n> <label n> [output file]"
 
 paper_mode = True
 
-if (len(sys.argv) - 1) % 2 != 0:
+if (len(sys.argv) - 1) % 2 == 0:
   outname = sys.argv[-1]
 else:
   outname = "memcached_latency"
 
+xtic_max = int(sys.argv[1])
+# for better visibility on x axis ticks, we deduct 100us from the max. 
+# Thus, user has to provide "intended max" + 100 in input 
+xtic_interval = (xtic_max - 100) / 4
+print "read xtic_max = %d and interval = %d" % (xtic_max, xtic_interval)
+
 fnames = []
 labels = []
-for i in range(0, len(sys.argv) - 1, 2):
-  fnames.append(sys.argv[1 + i])
-  labels.append(sys.argv[2 + i])
+for i in range(0, len(sys.argv) - 2, 2):
+  fnames.append(sys.argv[2 + i])
+  labels.append(sys.argv[3 + i])
 
 if paper_mode:
   fig = plt.figure(figsize=(2.33,1.55))
@@ -91,6 +98,9 @@ for f in fnames:
       continue
     req_type = fields[0]
     req_id = int(fields[1])
+    if len(fields) < 4:
+      print "Incorrect format. Skipping line '%s'" % (line)
+      continue
     req_delay = float(fields[3])
     if req_delay > 200000:
       minrto_outliers += 1
@@ -184,8 +194,8 @@ for f in fnames:
 
 plt.xticks()
 #  plt.xscale("log")
-plt.xlim(0, 10100)
-plt.xticks(range(0, 10100, 2500), [str(x) for x in range(0, 10100, 2500)])
+plt.xlim(0, xtic_max)
+plt.xticks(range(0, xtic_max, xtic_interval), [str(x) for x in range(0, xtic_max, xtic_interval)])
 plt.ylim(0, 1.0)
 plt.yticks(np.arange(0.0, 1.01, 0.2), [str(x) for x in np.arange(0.0, 1.01, 0.2)])
 plt.xlabel("Request latency [$\mu$s]")
