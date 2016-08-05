@@ -98,7 +98,7 @@ for f in fnames:
       continue
     req_type = fields[0]
     req_id = int(fields[1])
-    if len(fields) < 4:
+    if len(fields) != 4:
       print "Incorrect format. Skipping line '%s'" % (line)
       continue
     req_delay = float(fields[3])
